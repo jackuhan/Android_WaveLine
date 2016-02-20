@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:voiceView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_bright">
+
+    <com.carlos.voiceline.mylibrary.VoiceLineView
+        android:id="@+id/voicLine"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/transparent"
+        voiceView:middleLine="@android:color/transparent"
+        voiceView:middleLineHeight="0dp"
+        voiceView:rectSpace="0dp"
+        voiceView:rectWidth="1dp"
+        voiceView:viewMode="line"
+        voiceView:voiceLine="@android:color/holo_red_light" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/voicLine"
+        android:background="@android:color/white"/>
+
+</RelativeLayout>
