@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomWaveLine">
+        <!--前置波浪颜色-->
+        <attr name="above_wave_color" format="color" />
+        <!--后置波浪颜色-->
+        <attr name="blow_wave_color" format="color" />
+        <!--波长-->
+        <attr name="wave_length" format="integer" />
+        <!--波高-->
+        <attr name="wave_height" format="integer" />
+        <!--所画波浪的移动频率-->
+        <attr name="wave_hz" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="Themes">
+        <attr name="waveViewStyle" format="reference" />
+    </declare-styleable>
+</resources>
