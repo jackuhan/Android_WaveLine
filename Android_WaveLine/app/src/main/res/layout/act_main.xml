@@ -31,8 +31,9 @@
             android:background="@color/transparent"
             android:visibility="visible"
             wave:wave_height="50"
-            wave:wave_hz="5"
+            wave:wave_hz="1"
             wave:wave_length="2"
+            wave:below_line_show="false"
             wave:above_line_multi="true"/>
     </RelativeLayout>
 

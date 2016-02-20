@@ -18,6 +18,7 @@ public class CustomWaveLine extends LinearLayout {
     private int mWaveLength;
     private int mWaveHz;
     private boolean mWaveLineMulti;
+    private boolean mBelowLineShow;
 
     private Wave mWave;
     private Context context;
@@ -44,10 +45,11 @@ public class CustomWaveLine extends LinearLayout {
         mWaveLength = attributes.getInt(R.styleable.CustomWaveLine_wave_length, 2);
         mWaveHz = attributes.getInt(R.styleable.CustomWaveLine_wave_hz, 10);
         mWaveLineMulti = attributes.getBoolean(R.styleable.CustomWaveLine_above_line_multi, false);
+        mBelowLineShow = attributes.getBoolean(R.styleable.CustomWaveLine_below_line_show, false);
         attributes.recycle();
 
         mWave = new Wave(context, null);
-        mWave.initializeWaveSize(mWaveLength, mWaveHeight, mWaveHz, mWaveLineMulti);
+        mWave.initializeWaveSize(mWaveLength, mWaveHeight, mWaveHz, mWaveLineMulti,mBelowLineShow);
         mWave.setAboveWaveColor(mAboveWaveColor);
         mWave.setBelowWaveColor(mBlowWaveColor);
         mWave.initPaint();
@@ -74,7 +76,7 @@ public class CustomWaveLine extends LinearLayout {
     }
 
     public void setHeight(int height) {
-        mWave.initializeWaveSize(mWaveLength, height, mWaveHz, mWaveLineMulti);
+        mWave.initializeWaveSize(mWaveLength, height, mWaveHz, mWaveLineMulti,mBelowLineShow);
         mWave.initPaint();
         invalidate();
     }

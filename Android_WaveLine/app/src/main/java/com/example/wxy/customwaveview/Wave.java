@@ -20,9 +20,6 @@ class Wave extends View {
 
     private final float WAVE_HZ = 0.02f;
 
-    public final int DEFAULT_ABOVE_WAVE_ALPHA = 100;
-    public final int DEFAULT_BLOW_WAVE_ALPHA = 100;
-
     private final float X_SPACE = 20;
     private final double PI2 = 2 * Math.PI;
 
@@ -45,6 +42,7 @@ class Wave extends View {
     private float mAboveOffset = 0.0f;
     private float mBlowOffset;
     private boolean mWaveLineMulti;
+    private boolean mBelowLineShow;
 
     private RefreshProgressRunnable mRefreshProgressRunnable;
 
@@ -55,6 +53,11 @@ class Wave extends View {
     public Wave(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.waveViewStyle);
 
+        paths = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            paths.add(new Path());
+
+        }
     }
 
     public Wave(Context context, AttributeSet attrs, int defStyle) {
@@ -64,7 +67,10 @@ class Wave extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        canvas.drawPath(mBlowWavePath, mBlowWavePaint);
+
+        if(mBelowLineShow) {
+            canvas.drawPath(mBlowWavePath, mBlowWavePaint);
+        }
 
         if (mWaveLineMulti) {
             for (int i = 0; i < paths.size(); i++) {
@@ -84,20 +90,16 @@ class Wave extends View {
     }
 
 
-    public void initializeWaveSize(int waveMultiple, int waveHeight, int waveHz, boolean WaveLineMulti) {
+    public void initializeWaveSize(int waveMultiple, int waveHeight, int waveHz, boolean WaveLineMulti ,boolean BelowLineShow) {
         mWaveMultiple = getWaveMultiple(waveMultiple);
         mWaveHeight = waveHeight;
         mWaveHz = getWaveHz(waveHz);
         mBlowOffset = mWaveHeight * 2.0f;
         mWaveLineMulti = WaveLineMulti;
+        mBelowLineShow = BelowLineShow;
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, mWaveHeight * 2);
         setLayoutParams(params);
-        if (mWaveLineMulti) {
-            paths = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                paths.add(new Path());
-            }
-        }
+
     }
 
     public void initPaint() {
@@ -219,6 +221,7 @@ class Wave extends View {
         }
     }
 
+    //控制位移
     private void getWaveOffset() {
         if (mBlowOffset > Float.MAX_VALUE - 100) {
             mBlowOffset = 0;
@@ -231,6 +234,7 @@ class Wave extends View {
         } else {
             mAboveOffset += mWaveHz;
         }
+//        mAboveOffset = 0;
     }
 
     private class RefreshProgressRunnable implements Runnable {
