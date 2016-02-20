@@ -52,16 +52,16 @@ public class TestActivity extends Activity {
     private Runnable stop = new Runnable() {
         @Override
         public void run() {
-            if (height >= 0)
-                --height;
+            if (height >= 0) {
+                height-=4;
+            }
             customWaveLine.getLayoutParams().height = height * 2;
             customWaveLine.setHeight(height);
-            mHandler.postDelayed(stop, 10);
+            mHandler.postDelayed(stop, 100);
             if (height == 0) {
                 customWaveLine.setHeight(0);
                 customWaveLine.getLayoutParams().height = 0;
                 customWaveLine.showView(false);
-                customWaveLine.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -69,11 +69,12 @@ public class TestActivity extends Activity {
     private Runnable start = new Runnable() {
         @Override
         public void run() {
-            if (height < 24)
-                ++height;
+            if (height < 50) {
+                height+=4;
+            }
             customWaveLine.getLayoutParams().height = height * 2;
             customWaveLine.setHeight(height);
-            mHandler.postDelayed(start, 10);
+            mHandler.postDelayed(start, 100);
         }
     };
 

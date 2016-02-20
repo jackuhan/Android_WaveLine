@@ -90,7 +90,7 @@ public class VoiceLineView extends View implements Runnable {
             middleLineColor = typedArray.getColor(R.styleable.voiceView_middleLine, Color.BLACK);
             middleLineHeight = typedArray.getDimension(R.styleable.voiceView_middleLineHeight, 4);
             paths = new ArrayList<>();
-            for (int i = 0; i < 22; i++) {
+            for (int i = 0; i < 10; i++) {
                 paths.add(new Path());
             }
         }
@@ -139,7 +139,7 @@ public class VoiceLineView extends View implements Runnable {
         for (int i = 0; i < paths.size(); i++) {
             paths.get(i).reset();
             paths.get(i).moveTo(0, getHeight() / 2);
-        }//22条线
+        }//10条线
         for (float i = getWidth() - 1; i >= 0; i -= 1) {
             amplitude = 4 * volume * i / getWidth() - 4 * volume * i * i / getWidth() / getWidth();
             for (int n = 1; n <= paths.size(); n++) {

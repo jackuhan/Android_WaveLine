@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -16,7 +18,7 @@ class Wave extends View {
 
     private final float WAVE_LENGTH = 0.5f;
 
-    private final float WAVE_HZ = 0.01f;
+    private final float WAVE_HZ = 0.02f;
 
     public final int DEFAULT_ABOVE_WAVE_ALPHA = 100;
     public final int DEFAULT_BLOW_WAVE_ALPHA = 100;
@@ -26,6 +28,7 @@ class Wave extends View {
 
     private Path mAboveWavePath = new Path();
     private Path mBlowWavePath = new Path();
+    List<Path> paths = null;
 
     private Paint mAboveWavePaint = new Paint();
     private Paint mBlowWavePaint = new Paint();
@@ -39,8 +42,9 @@ class Wave extends View {
     private float mMaxRight;
     private float mWaveHz;
 
-    private float mAboveOffset = 0.1f;
+    private float mAboveOffset = 0.0f;
     private float mBlowOffset;
+    private boolean mWaveLineMulti;
 
     private RefreshProgressRunnable mRefreshProgressRunnable;
 
@@ -50,6 +54,7 @@ class Wave extends View {
 
     public Wave(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.waveViewStyle);
+
     }
 
     public Wave(Context context, AttributeSet attrs, int defStyle) {
@@ -59,8 +64,15 @@ class Wave extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawPath(mBlowWavePath, mBlowWavePaint);
-        canvas.drawPath(mAboveWavePath, mAboveWavePaint);
+//        canvas.drawPath(mBlowWavePath, mBlowWavePaint);
+
+        if (mWaveLineMulti) {
+            for (int i = 0; i < paths.size(); i++) {
+                canvas.drawPath(paths.get(i), mAboveWavePaint);
+            }
+        } else {
+            canvas.drawPath(mAboveWavePath, mAboveWavePaint);
+        }
     }
 
     public void setAboveWaveColor(int aboveWaveColor) {
@@ -72,13 +84,20 @@ class Wave extends View {
     }
 
 
-    public void initializeWaveSize(int waveMultiple, int waveHeight, int waveHz) {
+    public void initializeWaveSize(int waveMultiple, int waveHeight, int waveHz, boolean WaveLineMulti) {
         mWaveMultiple = getWaveMultiple(waveMultiple);
         mWaveHeight = waveHeight;
         mWaveHz = getWaveHz(waveHz);
         mBlowOffset = mWaveHeight * 2.0f;
+        mWaveLineMulti = WaveLineMulti;
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, mWaveHeight * 2);
         setLayoutParams(params);
+        if (mWaveLineMulti) {
+            paths = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                paths.add(new Path());
+            }
+        }
     }
 
     public void initPaint() {
@@ -88,7 +107,7 @@ class Wave extends View {
         mAboveWavePaint.setAntiAlias(true);//抗锯齿
 
         mBlowWavePaint.setColor(mBlowWaveColor);
-        mBlowWavePaint.setAlpha(100);
+        mBlowWavePaint.setAlpha(255);
         mBlowWavePaint.setStyle(Paint.Style.STROKE);
         mBlowWavePaint.setAntiAlias(true);
     }
@@ -107,24 +126,45 @@ class Wave extends View {
     private void calculatePath() {
         mAboveWavePath.reset();
         mBlowWavePath.reset();
+        if (mWaveLineMulti) {
+            for (int i = 0; i < paths.size(); i++) {
+                paths.get(i).reset();
+            }
+        }
 
         getWaveOffset();
 
         float y;
         mAboveWavePath.moveTo(left, bottom);
-        Random random1 = new Random(mWaveHeight);
-        Random random2 = new Random(mWaveHeight);
         for (float x = 0; x <= mMaxRight; x += X_SPACE) {
             y = (float) (mWaveHeight * Math.sin(omega * x + mAboveOffset + Math.PI) + mWaveHeight);//todo 计算高度
-//            y = random1.nextFloat();
             mAboveWavePath.lineTo(x, y);
+            if (mWaveLineMulti) {
+                for (int n = 1; n <= paths.size(); n++) {
+                    double yyy = Math.abs(y - mWaveHeight) * Math.cos(2 * 3 * n);
+                    double sin;
+                    if (y > mWaveHeight) {
+                        sin = mWaveHeight + yyy * Math.cos(2 * 3 * n);
+                    } else {
+                        sin = mWaveHeight - yyy * Math.cos(2 * 3 * n);
+                    }
+
+                    paths.get(n - 1).lineTo(x, (float) sin);
+                }
+            }
         }
         mAboveWavePath.lineTo(right, bottom);
+        if (mWaveLineMulti) {
+            for (int n = 1; n <= paths.size(); n++) {
+                paths.get(n - 1).lineTo(right, bottom);
+            }
+        }
+
 
         mBlowWavePath.moveTo(left, bottom);
         for (float x = 0; x <= mMaxRight; x += X_SPACE) {
             y = (float) (mWaveHeight * Math.sin(omega * x + mAboveOffset) + mWaveHeight);
-//            y = random2.nextFloat();
+//            y = mWaveHeight;
             mBlowWavePath.lineTo(x, y);
         }
         mBlowWavePath.lineTo(right, bottom);

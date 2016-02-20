@@ -11,6 +11,7 @@
         <attr name="wave_height" format="integer" />
         <!--所画波浪的移动频率-->
         <attr name="wave_hz" format="integer" />
+        <attr name="above_line_multi" format="boolean" />
     </declare-styleable>
     <declare-styleable name="Themes">
         <attr name="waveViewStyle" format="reference" />

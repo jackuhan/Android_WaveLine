@@ -17,6 +17,7 @@ public class CustomWaveLine extends LinearLayout {
     private int mWaveHeight;
     private int mWaveLength;
     private int mWaveHz;
+    private boolean mWaveLineMulti;
 
     private Wave mWave;
     private Context context;
@@ -39,13 +40,14 @@ public class CustomWaveLine extends LinearLayout {
         final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomWaveLine, 0, 0);
         mAboveWaveColor = attributes.getColor(R.styleable.CustomWaveLine_above_wave_color, DEFAULT_ABOVE_WAVE_COLOR);
         mBlowWaveColor = attributes.getColor(R.styleable.CustomWaveLine_blow_wave_color, DEFAULT_BLOW_WAVE_COLOR);
-        mWaveHeight = attributes.getInt(R.styleable.CustomWaveLine_wave_height, 25);
+        mWaveHeight = attributes.getInt(R.styleable.CustomWaveLine_wave_height, 50);
         mWaveLength = attributes.getInt(R.styleable.CustomWaveLine_wave_length, 2);
         mWaveHz = attributes.getInt(R.styleable.CustomWaveLine_wave_hz, 10);
+        mWaveLineMulti = attributes.getBoolean(R.styleable.CustomWaveLine_above_line_multi, false);
         attributes.recycle();
 
         mWave = new Wave(context, null);
-        mWave.initializeWaveSize(mWaveLength, mWaveHeight, mWaveHz);
+        mWave.initializeWaveSize(mWaveLength, mWaveHeight, mWaveHz, mWaveLineMulti);
         mWave.setAboveWaveColor(mAboveWaveColor);
         mWave.setBelowWaveColor(mBlowWaveColor);
         mWave.initPaint();
@@ -72,7 +74,7 @@ public class CustomWaveLine extends LinearLayout {
     }
 
     public void setHeight(int height) {
-        mWave.initializeWaveSize(mWaveLength, height, mWaveHz);
+        mWave.initializeWaveSize(mWaveLength, height, mWaveHz, mWaveLineMulti);
         mWave.initPaint();
         invalidate();
     }

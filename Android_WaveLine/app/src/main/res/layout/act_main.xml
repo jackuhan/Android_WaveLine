@@ -26,13 +26,14 @@
         <com.example.wxy.customwaveview.CustomWaveLine
             android:id="@+id/cwv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50px"
             android:layout_alignParentBottom="true"
             android:background="@color/transparent"
             android:visibility="visible"
-            wave:wave_height="25"
+            wave:wave_height="50"
             wave:wave_hz="5"
-            wave:wave_length="2" />
+            wave:wave_length="2"
+            wave:above_line_multi="true"/>
     </RelativeLayout>
 
 </LinearLayout>
